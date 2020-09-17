@@ -31,5 +31,6 @@
 
    5.将注释相应代码copy到Router相对应的位置。在 MaterialApp onGenerateRoute中注册 MXCRouter.instance.routeFactory;
 
+   6.在main方法中，runApp之前调用Router.init();
 
-   6.在做跳转操作时即可使用：context.pushToAbcTest($a:'a',$b:'b',$c: TestModel()); (abcTest == 注解中url path部分)获取当前路由参数可使用context.argumentsAbcTest();
+   7.在做跳转操作时即可使用：context.pushToAbcTest($a:'a',$b:'b',$c: TestModel()); (abcTest == 注解中url path部分)获取当前路由参数可使用context.argumentsAbcTest();
