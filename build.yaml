@@ -13,19 +13,19 @@ targets:
 
 
 builders:
-  mxc_router_gen:
-    target: ":mxc_router"
-    import: "package:mxc_router/router/builder.dart"
-    builder_factories: ["mxcRouter"]
-    build_extensions: {".dart": [".internal.dart"]}
-    auto_apply: dependents
-    build_to: source
-
   mxc_write_router_gen:
     target: ":mxc_write_router"
     import: "package:mxc_router/router/builder.dart"
     builder_factories: ["mxcWriteRouter"]
     build_extensions: {".route.dart": [".internal_invalid.dart"]}
     auto_apply: dependents
-    runs_before: ['mxc_router|mxc_router_gen']
+    build_to: source
+    
+  mxc_router_gen:
+    target: ":mxc_router"
+    import: "package:mxc_router/router/builder.dart"
+    builder_factories: ["mxcRouter"]
+    build_extensions: {".dart": [".internal.dart"]}
+    runs_before: ['mxc_router|mxc_write_router_gen']
+    auto_apply: dependents
     build_to: source
