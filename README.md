@@ -24,8 +24,14 @@
         class Main{}
 
    3.新建类名**.router.dart文件，并添加注解：
+
         @MXCWriterRouter()
         class Router{}
+
+
    4.执行  flutter packages pub run build_runner clean && flutter packages pub run build_runner build 生成dart文件
+
    5.将注释相应代码copy到Router相对应的位置。在 MaterialApp onGenerateRoute中注册 MXCRouter.instance.routeFactory;
-   6.在做跳转操作时即可使用：context.pushToAbcTest($a:'a',$b:'b',$c: TestModel()); 获取当前路由参数
+
+
+   6.在做跳转操作时即可使用：context.pushToAbcTest($a:'a',$b:'b',$c: TestModel()); (abcTest == 注解中url path部分)获取当前路由参数可使用context.argumentsAbcTest();
