@@ -41,17 +41,21 @@ class MXCRouter {
 
   IRouterProvider _provider;
 
+  RouteFactory _routeFactory;
+
   void registerRouterProvider(IRouterProvider provider) {
     this._provider = provider;
   }
 
-  void init() {
-    _provider = _DefaultRouterProvider();
+
+
+
+  void registerRouterFactory(RouteFactory factory){
+    this._routeFactory =factory;
   }
 
-  // Route<dynamic> onGenerateRoute(RouteSettings settings) {
-  //   return mxcOnGenerateRoute(settings);
-  // }
+
+  RouteFactory get routeFactory => _routeFactory;
 
   IRouterProvider get provider {
     _provider ??= _DefaultRouterProvider();

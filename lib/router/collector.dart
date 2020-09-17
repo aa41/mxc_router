@@ -21,15 +21,15 @@ class Collector {
   }
 
   String write(String targetPath) {
-    return _parse( targetPath);
+    return _parse(targetPath);
   }
 
   String _parse(String targetPath) {
-    dWriter.appendPart('part of "$targetPath";');
-    dWriter.appendImport('part "${targetPath.replaceAll('.route.dart', '.route.internal_invalid.dart')}";');
+    dWriter.appendPart("part of '$targetPath';");
     dWriter.appendImport("import 'package:flutter/material.dart';");
     dWriter.appendImport(
-        "import 'package:gif_image/router/router_provider.dart';");
+        "import 'package:mxc_router/router/router_provider.dart';");
+    dWriter.appendImport("import 'package:mxc_router/router/m_router.dart';");
     ExtensionWriter extensionWriter =
         dWriter.createNewExtension('MXCRouterBuildContext', 'BuildContext');
     _writeCommonExt(extensionWriter);
@@ -49,19 +49,20 @@ class Collector {
     List<SwitchTplModel> routerArgs = [];
 
     _params.forEach((key, value) {
-
       List<String> _aliasName = value.aliasNames.map((e) {
         return e.toStringValue();
       }).toList();
 
-      dWriter.appendComment('-----------------------------------------------------------------');
+      dWriter.appendComment(
+          '-----------------------------------------------------------------');
 
       dWriter.appendComment('routerName == ${value.url}');
       dWriter.appendComment('packagePath == ${value.path}');
       dWriter.appendComment('className == ${_clsCaches[key]}');
       dWriter.appendComment('aliasNames == ${_aliasName.toString()}');
 
-      dWriter.appendComment('-----------------------------------------------------------------');
+      dWriter.appendComment(
+          '-----------------------------------------------------------------');
       dWriter.appendImport(value.path);
       Map<DartObject, DartObject> params = value.params;
       Map<FieldInfo, FieldInfo> _paramsInfo = {};
@@ -96,8 +97,6 @@ class Collector {
       return ${_clsCaches[value.url] == null ? "MXCRouter.instance.provider.buildNotFoundWidget(settings)" : "${_clsCaches[value.url]}()"};
     });
       ''';
-
-
 
       routerArgs.add(SwitchTplModel('${value.url}', '$_switchTplContent',
           switchCases: _aliasName));
@@ -160,7 +159,6 @@ class Collector {
       _pushNamedAndRemoveUntil.appendMethodContent('''
       return this.routerProvider.pushNamedAndRemoveUntil(this, '${value.url}', predicate,arguments:  ${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)});      
       ''');
-
 
       var argumentsCurrentAsync = extensionWriter.createMethod(
         returnType: 'Future<$modelName>',
