@@ -83,12 +83,13 @@ class DartWriter {
       _buffer.write(element);
     });
 
-    _topComment.add('*/');
+    if(_topComment != null){
+      _topComment.add('*/');
+      _topComment.forEach((element) {
+        _buffer.write('$element\r\n');
+      });
+    }
 
-
-    _topComment.forEach((element) {
-      _buffer.write('$element\r\n');
-    });
 
     _fieldCaches.forEach((element) {
       _buffer.write(element.toWriterString());
@@ -117,11 +118,7 @@ class ExtensionWriter extends IWriter {
 
   ExtensionWriter({this.extensionName, this.extensionType});
 
-  @override
-  void end() {}
 
-  @override
-  void start() {}
 
   MethodWriter createMethod({
     String returnType,
