@@ -29,7 +29,7 @@ class Collector {
     dWriter.appendImport("import 'package:flutter/material.dart';");
     dWriter.appendImport(
         "import 'package:mxc_router/router/router_provider.dart';");
-    dWriter.appendImport("import 'package:mxc_router/router/m_router.dart';");
+    // dWriter.appendImport("import 'package:mxc_router/router/m_router.dart';");
     ExtensionWriter extensionWriter =
         dWriter.createNewExtension('MXCRouterBuildContext', 'BuildContext');
     _writeCommonExt(extensionWriter);
@@ -59,6 +59,7 @@ class Collector {
       dWriter.appendComment('routerName == ${value.url}');
       dWriter.appendComment('packagePath == ${value.path}');
       dWriter.appendComment('className == ${_clsCaches[key]}');
+      dWriter.appendComment('desc == ${value.desc ?? ''}');
       dWriter.appendComment('aliasNames == ${_aliasName.toString()}');
 
       dWriter.appendComment(
