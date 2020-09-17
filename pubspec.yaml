@@ -1,8 +1,10 @@
 name: mxc_router
-description: a router by extension and annotation  
-version: 0.0.1
-author:
-homepage:
+description: a router by extension and annotation.
+version: 1.0.0
+repository: https://github.com/aa41/mxc_router
+homepage: https://github.com/aa41/mxc_router
+issue_tracker: https://github.com/aa41/mxc_router/issues
+author: mxc
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -10,10 +12,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  analyzer: ">=0.39.0 <1.0.0"
+  build: ">=1.0.0 <2.0.0"
+  source_gen: ">=0.9.0 <1.0.0"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ">=1.0.0 <2.0.0"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
