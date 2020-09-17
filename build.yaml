@@ -20,7 +20,7 @@ builders:
     build_extensions: {".route.dart": [".internal_invalid.dart"]}
     auto_apply: dependents
     build_to: source
-    
+
   mxc_router_gen:
     target: ":mxc_router"
     import: "package:mxc_router/router/builder.dart"

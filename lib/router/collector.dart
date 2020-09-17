@@ -20,11 +20,13 @@ class Collector {
     _clsCaches[url] = clsName;
   }
 
-  String write() {
-    return _parse();
+  String write(String targetPath) {
+    return _parse( targetPath);
   }
 
-  String _parse() {
+  String _parse(String targetPath) {
+    dWriter.appendPart('part of "$targetPath";');
+    dWriter.appendImport('part "${targetPath.replaceAll('.route.dart', '.route.internal_invalid.dart')}";');
     dWriter.appendImport("import 'package:flutter/material.dart';");
     dWriter.appendImport(
         "import 'package:gif_image/router/router_provider.dart';");

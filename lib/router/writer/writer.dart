@@ -15,7 +15,12 @@ class DartWriter {
 
   List<String> _topComment;
 
+  String _part = '';
 
+  DartWriter() {
+    _topComment = [];
+    _topComment.add('/*');
+  }
 
   ClassWriter createNewClass(String className) {
     ClassWriter _clsWriter = new ClassWriter(className);
@@ -44,11 +49,7 @@ class DartWriter {
     return writer;
   }
 
-  void appendComment(String comment){
-    if(_topComment == null){
-      _topComment = [];
-      _topComment.add('/*');
-    }
+  void appendComment(String comment) {
     _topComment.add(comment);
   }
 
@@ -65,6 +66,10 @@ class DartWriter {
   }
 
   void appendImport(String import) {
+    if (import.trimLeft().startsWith('part')) {
+      _import.add(import);
+      return;
+    }
     if (!import.trimLeft().startsWith('import')) {
       import = "import '$import'";
     }
@@ -76,20 +81,37 @@ class DartWriter {
     _import.add(import);
   }
 
+  void appendPart(String part) {
+    _part = part;
+  }
+
   String toWriterString() {
     StringBuffer _buffer = new StringBuffer('');
+    _buffer.write(_part);
 
+    appendComment(
+        '-----------------------------------------------------------------');
+    appendComment(
+        '-----------------------------------------------------------------');
+    appendComment(
+        '-----------------------------------------------------------------');
+    appendComment('copy these import to your target annotation class!!!!!!!!');
     _import.forEach((element) {
-      _buffer.write(element);
+      _topComment.add(element);
     });
+    appendComment(
+        '-----------------------------------------------------------------');
+    appendComment(
+        '-----------------------------------------------------------------');
+    appendComment(
+        '-----------------------------------------------------------------');
 
-    if(_topComment != null){
+    if (_topComment != null) {
       _topComment.add('*/');
       _topComment.forEach((element) {
         _buffer.write('$element\r\n');
       });
     }
-
 
     _fieldCaches.forEach((element) {
       _buffer.write(element.toWriterString());
@@ -117,8 +139,6 @@ class ExtensionWriter extends IWriter {
   Set<MethodWriter> _methodCaches = LinkedHashSet();
 
   ExtensionWriter({this.extensionName, this.extensionType});
-
-
 
   MethodWriter createMethod({
     String returnType,
@@ -297,14 +317,14 @@ class MethodWriter extends IWriter {
 }
 
 class FieldWriter extends IWriter {
-   String type;
-   String name;
-   bool isFinal;
-   bool isStatic;
-   bool isConst;
-   dynamic defaultValue;
-   bool isConstructorParamsAndHasThisField;
-   dynamic value;
+  String type;
+  String name;
+  bool isFinal;
+  bool isStatic;
+  bool isConst;
+  dynamic defaultValue;
+  bool isConstructorParamsAndHasThisField;
+  dynamic value;
 
   FieldWriter({
     this.type,
@@ -354,7 +374,6 @@ class FieldWriter extends IWriter {
     if (defaultValue != null) {
       _buffer.write(' = ${defaultValue.toString()}');
     }
-
 
     _buffer.write(',');
 

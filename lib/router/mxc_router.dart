@@ -38,6 +38,7 @@ class MxcRouterGen extends GeneratorForAnnotation<MRouter> {
       path = "${buildStep.inputId.path}";
     }
 
+
     var aliasNamesField = annotation.peek("aliasNames");
     var urlField = annotation.peek("url");
     var descField = annotation.peek("desc");
@@ -68,6 +69,8 @@ class MXCWriteRouterGen extends GeneratorForAnnotation<MXCWriterRouter> {
       Element element, ConstantReader annotation, BuildStep buildStep) {
     if (element is! ClassElement) throw "must annotated on class";
 
-    return getCollector().write();
+
+
+    return getCollector().write(element.source.uri.pathSegments.last);
   }
 }
