@@ -8,9 +8,7 @@
 
 
    2.在页面上添加注解：
-   final Map<String, dynamic> params;
-     final List<String> aliasNames;
-     final String url;
+
         @MRouter(
             url = 'test://abc/test',//路由url
             aliasNames = ['testA','/'],//别名
