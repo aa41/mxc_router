@@ -96,22 +96,32 @@ class DartWriter {
     appendComment(
         '-----------------------------------------------------------------');
     appendComment('copy these import to your target annotation class!!!!!!!!');
-    appendImport("part '${_part.replaceAll('.route.dart', '.route.internal_invalid.dart')}';");
+    appendComment('');
+    appendComment('');
+    appendComment('');
+    appendImport(
+        "part '${_part.replaceAll('.route.dart', '.route.internal_invalid.dart')}';");
     _import.forEach((element) {
       _topComment.add(element);
     });
+    appendComment('');
+    appendComment('');
+    appendComment('');
 
 
 
-
-    appendComment(
-        'also copy this method to your target annotation class!!!!!!!');
-
+    appendComment('also copy this method to your target annotation class!!!!!!!');
+    appendComment('');
+    appendComment('');
+    appendComment('');
     appendComment('''
     void init() {
       MXCRouter.instance.registerRouterFactory(mxcOnGenerateRoute);
-  }
+    }
     ''');
+    appendComment('');
+    appendComment('');
+    appendComment('');
 
     appendComment(
         '-----------------------------------------------------------------');
