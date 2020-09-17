@@ -99,8 +99,6 @@ class DartWriter {
     appendComment('');
     appendComment('');
     appendComment('');
-    appendImport(
-        "part '${_part.replaceAll('.route.dart', '.route.internal_invalid.dart')}';");
     _import.forEach((element) {
       _topComment.add(element);
     });

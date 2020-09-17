@@ -190,6 +190,8 @@ class Collector {
       });
     ''');
 
+    dWriter.appendImport(
+        "part '${targetPath.replaceAll('.route.dart', '.route.internal_invalid.dart')}';");
     return dWriter.toWriterString();
   }
 
