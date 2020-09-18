@@ -202,7 +202,7 @@ class Collector {
   }
 
   String _injectOutputArgsTpl(String t, String content) {
-    return '''this.routerProvider.injectOutputArguments<$t>($content);''';
+    return '''this.routerProvider.injectOutputArguments<$t>($content)''';
   }
 
   void _writeCommonExt(ExtensionWriter extensionWriter) {
