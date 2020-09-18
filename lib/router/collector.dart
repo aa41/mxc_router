@@ -124,7 +124,7 @@ class Collector {
           params: _fieldWriter,
           isParamNamed: true);
       pushTo.appendMethodContent(
-          " return this.routerProvider.pushName<T>(this, '${value.url}',arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}');");
+          " return this.routerProvider.pushName<T>(this, '${value.url}',arguments: ${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")});");
 
       MethodWriter pushReplacementNamed = extensionWriter.createMethod(
           returnType: 'Future<T>',
@@ -132,7 +132,7 @@ class Collector {
           params: _fieldWriter,
           isParamNamed: true);
       pushReplacementNamed.appendMethodContent(
-          " return this.routerProvider.pushReplacementNamed<T>(this, '${value.url}',arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}');");
+          " return this.routerProvider.pushReplacementNamed<T>(this, '${value.url}',arguments: ${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")});");
 
       List<FieldWriter> _popFields = _fieldWriter.map((e) {
         return e;
@@ -148,7 +148,7 @@ class Collector {
           params: _popFields,
           isParamNamed: true);
       popAndPushNamedTo.appendMethodContent(
-          "return this.routerProvider.popAndPushNamed<T,T0>(this, '${value.url}', arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}', result: result);");
+          "return this.routerProvider.popAndPushNamed<T,T0>(this, '${value.url}', arguments: ${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}, result: result);");
 
       List<FieldWriter> _pushNamedAndRemoveUntilFields = _fieldWriter.map((e) {
         return e;
@@ -165,7 +165,7 @@ class Collector {
           isParamNamed: true);
 
       _pushNamedAndRemoveUntil.appendMethodContent('''
-      return this.routerProvider.pushNamedAndRemoveUntil(this, '${value.url}', predicate,arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}');      
+      return this.routerProvider.pushNamedAndRemoveUntil(this, '${value.url}', predicate,arguments: ${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")});      
       ''');
 
       var argumentsCurrentAsync = extensionWriter.createMethod(

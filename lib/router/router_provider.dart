@@ -1,9 +1,16 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
+abstract class RouterInterceptor {
+  Route<dynamic> interceptor(RouteSettings settings);
+}
 
 abstract class IRouterProvider {
+  Set<RouterInterceptor> _routerInterceptors = LinkedHashSet();
+
   Future<T> pushName<T>(BuildContext context, String routeName,
       {Object arguments});
 
@@ -21,12 +28,23 @@ abstract class IRouterProvider {
     Object arguments,
   });
 
+  void _addInterceptor(RouterInterceptor interceptor) {
+    _routerInterceptors.add(interceptor);
+  }
+
   Future<T> argumentsAsync<T>(BuildContext context);
 
   T arguments<T>(BuildContext context);
 
-
-  Route<dynamic> injectGenerateRoute(RouteSettings settings);
+  Route<dynamic> injectGenerateRoute(RouteSettings settings) {
+    for (RouterInterceptor interceptor in _routerInterceptors) {
+      if (interceptor != null) {
+        var route = interceptor.interceptor(settings);
+        if (route != null) return route;
+      }
+    }
+    return null;
+  }
 
   Widget buildNotFoundWidget(RouteSettings settings);
 
@@ -36,7 +54,6 @@ abstract class IRouterProvider {
   Object injectInputArguments<T>(T arguments);
 
   T injectOutputArguments<T>(Object args);
-
 }
 
 class MXCRouter {
@@ -52,13 +69,13 @@ class MXCRouter {
     this._provider = provider;
   }
 
-
-
-
-  void registerRouterFactory(RouteFactory factory){
-    this._routeFactory =factory;
+  void registerRouterFactory(RouteFactory factory) {
+    this._routeFactory = factory;
   }
 
+  void addInterceptor(RouterInterceptor interceptor) {
+    _provider._addInterceptor(interceptor);
+  }
 
   RouteFactory get routeFactory => _routeFactory;
 
@@ -80,7 +97,7 @@ class _DefaultRouterProvider extends IRouterProvider {
   Future<T> popAndPushNamed<T extends Object, TO extends Object>(
       BuildContext context, String routeName,
       {TO result, Object arguments}) {
-    return Navigator.popAndPushNamed<T,TO>(context, routeName,
+    return Navigator.popAndPushNamed<T, TO>(context, routeName,
         result: result, arguments: arguments);
   }
 
@@ -125,21 +142,14 @@ class _DefaultRouterProvider extends IRouterProvider {
   }
 
   @override
-  Route injectGenerateRoute(RouteSettings settings) {
-    return null;
-  }
-
-  @override
   Object injectInputArguments<T>(T arguments) {
-   return arguments;
+    return arguments;
   }
 
   @override
   T injectOutputArguments<T>(Object args) {
     return args;
   }
-
-
 }
 
 extension MXCContext on BuildContext {
