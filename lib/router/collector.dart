@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:mxc_router/mxc_router.dart';
 import 'package:mxc_router/router/m_router.dart';
 import 'package:mxc_router/router/utils/utils.dart';
 import 'package:mxc_router/router/writer/tpl.dart';
@@ -41,8 +42,9 @@ class Collector {
         isParamNamed: false);
 
     onGenerateRoute.appendMethodContent('''
-    if(MXCRouter.instance.provider.buildNotFoundWidget(settings) != null){
-    return MXCRouter.instance.provider.injectGenerateRoute(settings);
+      var injectRoute = MXCRouter.instance.provider.injectGenerateRoute(settings);
+    if(injectRoute != null){
+      return injectRoute;
   }
     ''');
 
@@ -99,6 +101,12 @@ class Collector {
     });
       ''';
 
+      String _injectInputArgsTpl(String args) {
+        return '''
+             this.routerProvider.injectInputArguments($args); 
+        ''';
+      }
+
       routerArgs.add(SwitchTplModel('${value.url}', '$_switchTplContent',
           switchCases: _aliasName));
 
@@ -117,7 +125,7 @@ class Collector {
           params: _fieldWriter,
           isParamNamed: true);
       pushTo.appendMethodContent(
-          " return this.routerProvider.pushName<T>(this, '${value.url}',arguments: ${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)});");
+          " return this.routerProvider.pushName<T>(this, '${value.url}',arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}');");
 
       MethodWriter pushReplacementNamed = extensionWriter.createMethod(
           returnType: 'Future<T>',
@@ -125,7 +133,7 @@ class Collector {
           params: _fieldWriter,
           isParamNamed: true);
       pushReplacementNamed.appendMethodContent(
-          " return this.routerProvider.pushReplacementNamed<T>(this, '${value.url}',arguments: ${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)});");
+          " return this.routerProvider.pushReplacementNamed<T>(this, '${value.url}',arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}');");
 
       List<FieldWriter> _popFields = _fieldWriter.map((e) {
         return e;
@@ -141,7 +149,7 @@ class Collector {
           params: _popFields,
           isParamNamed: true);
       popAndPushNamedTo.appendMethodContent(
-          "return this.routerProvider.popAndPushNamed<T,T0>(this, '${value.url}', arguments: ${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}, result: result);");
+          "return this.routerProvider.popAndPushNamed<T,T0>(this, '${value.url}', arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}', result: result);");
 
       List<FieldWriter> _pushNamedAndRemoveUntilFields = _fieldWriter.map((e) {
         return e;
@@ -158,7 +166,7 @@ class Collector {
           isParamNamed: true);
 
       _pushNamedAndRemoveUntil.appendMethodContent('''
-      return this.routerProvider.pushNamedAndRemoveUntil(this, '${value.url}', predicate,arguments:  ${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)});      
+      return this.routerProvider.pushNamedAndRemoveUntil(this, '${value.url}', predicate,arguments: '${_injectInputArgsTpl("${modelCls.toInitializedString(fields: _methodField, isParamNamed: true)}")}');      
       ''');
 
       var argumentsCurrentAsync = extensionWriter.createMethod(
@@ -168,7 +176,7 @@ class Collector {
         isAsync: true,
       );
       argumentsCurrentAsync.appendMethodContent('''
-       return argumentsAsync<$modelName>();
+       return ${_injectOutputArgsTpl("$modelName", ' await argumentsAsync()')}
       ''');
 
       var argumentsCurrent = extensionWriter.createMethod(
@@ -178,7 +186,7 @@ class Collector {
         isAsync: false,
       );
       argumentsCurrent.appendMethodContent('''
-       return arguments<$modelName>();
+       return ${_injectOutputArgsTpl("$modelName", 'arguments()')};
       ''');
     });
 
@@ -194,6 +202,12 @@ class Collector {
     dWriter.appendImport(
         "part '${targetPath.replaceAll('.route.dart', '.route.internal_invalid.dart')}';");
     return dWriter.toWriterString();
+  }
+
+  String _injectOutputArgsTpl(String t, String content) {
+    return '''
+    this.routerProvider.injectOutputArguments<$t>($content);
+    ''';
   }
 
   void _writeCommonExt(ExtensionWriter extensionWriter) {

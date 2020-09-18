@@ -32,6 +32,11 @@ abstract class IRouterProvider {
 
   Route<dynamic> buildCustomRoute(
       String url, dynamic arguments, WidgetBuilder builder);
+
+  Object injectInputArguments<T>(T arguments);
+
+  T injectOutputArguments<T>(Object args);
+
 }
 
 class MXCRouter {
