@@ -42,9 +42,9 @@ class Collector {
 
     onGenerateRoute.appendMethodContent('''
       var injectRoute = MXCRouter.instance.provider.injectGenerateRoute(settings);
-    if(injectRoute != null){
-      return injectRoute;
-  }
+      if(injectRoute != null){
+        return injectRoute;
+      }
     ''');
 
     List<SwitchTplModel> routerArgs = [];
@@ -101,9 +101,7 @@ class Collector {
       ''';
 
       String _injectInputArgsTpl(String args) {
-        return '''
-             this.routerProvider.injectInputArguments($args); 
-        ''';
+        return '''this.routerProvider.injectInputArguments($args)''';
       }
 
       routerArgs.add(SwitchTplModel('${value.url}', '$_switchTplContent',
@@ -204,9 +202,7 @@ class Collector {
   }
 
   String _injectOutputArgsTpl(String t, String content) {
-    return '''
-    this.routerProvider.injectOutputArguments<$t>($content);
-    ''';
+    return '''this.routerProvider.injectOutputArguments<$t>($content);''';
   }
 
   void _writeCommonExt(ExtensionWriter extensionWriter) {
