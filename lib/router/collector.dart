@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:mxc_router/mxc_router.dart';
 import 'package:mxc_router/router/m_router.dart';
 import 'package:mxc_router/router/utils/utils.dart';
 import 'package:mxc_router/router/writer/tpl.dart';

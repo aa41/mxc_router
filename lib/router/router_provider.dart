@@ -129,6 +129,16 @@ class _DefaultRouterProvider extends IRouterProvider {
     return null;
   }
 
+  @override
+  Object injectInputArguments<T>(T arguments) {
+   return arguments;
+  }
+
+  @override
+  T injectOutputArguments<T>(Object args) {
+    return args;
+  }
+
 
 }
 
