@@ -177,7 +177,7 @@ class Collector {
         isAsync: true,
       );
       argumentsCurrentAsync.appendMethodContent('''
-       return ${_injectOutputArgsTpl("$modelName", ' await argumentsAsync()')}
+       return ${_injectOutputArgsTpl("$modelName", ' await argumentsAsync()')};
       ''');
 
       var argumentsCurrent = extensionWriter.createMethod(
