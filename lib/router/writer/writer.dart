@@ -93,7 +93,7 @@ class DartWriter {
 
   String toWriterString() {
     StringBuffer _buffer = new StringBuffer('');
-    _buffer.write(_part);
+    _buffer.writeln(_part);
 
     appendComment(
         '-----------------------------------------------------------------');
@@ -136,7 +136,7 @@ class DartWriter {
     if (_topComment != null) {
       _topComment.add('*/');
       _topComment.forEach((element) {
-        _buffer.write('$element\r\n');
+        _buffer.writeln('$element');
       });
     }
 
