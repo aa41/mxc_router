@@ -213,7 +213,7 @@ class Collector {
 
     var getUrls = dWriter.createMethod(
       returnType: 'List<String>',
-      name: 'getUrls',
+      name: 'getRouteUrls',
     );
     getUrls.appendMethodContent('''return _urls;''');
 
