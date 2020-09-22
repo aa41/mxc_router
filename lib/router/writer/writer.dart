@@ -322,12 +322,12 @@ class MethodWriter extends IWriter {
   @override
   String toWriterString() {
     StringBuffer _tmp = new StringBuffer('');
-    params.forEach((element) {
+    params?.forEach((element) {
       _tmp.write('${element.toMethodString()}');
     });
 
     StringBuffer _content = StringBuffer('');
-    _contents.forEach((element) {
+    _contents?.forEach((element) {
       _content.write(element);
     });
 
