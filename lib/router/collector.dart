@@ -207,7 +207,9 @@ class Collector {
         type: 'List<String>',
         isConst: true,
         name: '_urls',
-        value: "${_urls.toString()}"));
+        value: "${_urls.fold('[', (previousValue, element){
+          return previousValue + '"$element",';
+        })+']'}"));
 
     var getUrls = dWriter.createMethod(
       returnType: 'List<String>',
