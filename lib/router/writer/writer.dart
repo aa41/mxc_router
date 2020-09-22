@@ -15,6 +15,8 @@ class DartWriter {
 
   List<String> _topComment;
 
+  List<String> _topContent = [];
+
   String _part = '';
 
   DartWriter() {
@@ -47,6 +49,10 @@ class DartWriter {
         isParamNamed: isParamNamed);
     _methodCaches.add(writer);
     return writer;
+  }
+
+  void appendTopContent(String content) {
+    _topContent.add(content);
   }
 
   void appendComment(String comment) {
@@ -106,9 +112,8 @@ class DartWriter {
     appendComment('');
     appendComment('');
 
-
-
-    appendComment('also copy this method to your target annotation class!!!!!!!');
+    appendComment(
+        'also copy this method to your target annotation class!!!!!!!');
     appendComment('');
     appendComment('');
     appendComment('');
@@ -134,6 +139,10 @@ class DartWriter {
         _buffer.write('$element\r\n');
       });
     }
+
+    _topContent.forEach((element) {
+      _buffer.writeln(element);
+    });
 
     _fieldCaches.forEach((element) {
       _buffer.write(element.toWriterString());
@@ -193,8 +202,6 @@ class ExtensionWriter extends IWriter {
         content: _buffer.toString());
   }
 }
-
-extension A on String {}
 
 class ClassWriter extends IWriter {
   final String className;

@@ -9,6 +9,7 @@ import 'package:mxc_router/router/writer/writer.dart';
 
 const _packWhiteList = ['core/'];
 
+
 class Collector {
   Map<String, MRouterInfo> _params = {};
   Map<String, String> _clsCaches = {};
@@ -49,6 +50,8 @@ class Collector {
 
     List<SwitchTplModel> routerArgs = [];
 
+    List<String> _urls = [];
+
     _params.forEach((key, value) {
       List<String> _aliasName = value.aliasNames.map((e) {
         return e.toStringValue();
@@ -63,6 +66,7 @@ class Collector {
       dWriter.appendComment('desc == ${value.desc ?? ''}');
       dWriter.appendComment('aliasNames == ${_aliasName.toString()}');
 
+      _urls.add('${value.url}');
       dWriter.appendComment(
           '-----------------------------------------------------------------');
       dWriter.appendImport(value.path);
@@ -198,6 +202,19 @@ class Collector {
 
     dWriter.appendImport(
         "part '${targetPath.replaceAll('.route.dart', '.route.internal_invalid.dart')}';");
+
+    dWriter.addField(FieldWriter(
+        type: 'List<String>',
+        isConst: true,
+        name: '_urls',
+        value: "${_urls.toString()}"));
+
+    var getUrls = dWriter.createMethod(
+      returnType: 'List<String>',
+      name: 'getUrls',
+    );
+    getUrls.appendMethodContent('''return _urls;''');
+
     return dWriter.toWriterString();
   }
 
