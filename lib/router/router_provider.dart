@@ -8,7 +8,7 @@ abstract class RouterInterceptor {
   Route<dynamic> interceptor(RouteSettings settings);
 }
 
-abstract class IRouterProvider {
+abstract class _IRouterProvider {
   Set<RouterInterceptor> _routerInterceptors = LinkedHashSet();
 
   Future<T> pushName<T>(BuildContext context, String routeName,
@@ -56,16 +56,27 @@ abstract class IRouterProvider {
   T injectOutputArguments<T>(Object args);
 }
 
+abstract class RouterProvider extends _IRouterProvider {
+  RouterProvider _oldProvider;
+
+  void attachOldProvider(RouterProvider provider) {
+    _oldProvider = provider;
+  }
+
+  RouterProvider get oldProvider => _oldProvider;
+}
+
 class MXCRouter {
   static MXCRouter _instance = MXCRouter();
 
   static MXCRouter get instance => _instance;
 
-  IRouterProvider _provider;
+  RouterProvider _provider;
 
   RouteFactory _routeFactory;
 
-  void registerRouterProvider(IRouterProvider provider) {
+  void registerRouterProvider(RouterProvider provider) {
+    provider.attachOldProvider(_provider);
     this._provider = provider;
   }
 
@@ -79,13 +90,13 @@ class MXCRouter {
 
   RouteFactory get routeFactory => _routeFactory;
 
-  IRouterProvider get provider {
+  RouterProvider get provider {
     _provider ??= _DefaultRouterProvider();
     return _provider;
   }
 }
 
-class _DefaultRouterProvider extends IRouterProvider {
+class _DefaultRouterProvider extends RouterProvider {
   @override
   Route buildCustomRoute(String url, dynamic arguments, WidgetBuilder builder) {
     return MaterialPageRoute(
@@ -153,5 +164,5 @@ class _DefaultRouterProvider extends IRouterProvider {
 }
 
 extension MXCContext on BuildContext {
-  IRouterProvider get routerProvider => MXCRouter.instance.provider;
+  RouterProvider get routerProvider => MXCRouter.instance.provider;
 }
