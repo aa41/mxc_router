@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class RouterInterceptor {
-  Route<dynamic> interceptor(RouteSettings settings);
-}
+typedef Route<dynamic> RouterInterceptor(RouteSettings settings);
 
 abstract class _IRouterProvider {
   Set<RouterInterceptor> _routerInterceptors = LinkedHashSet();
@@ -39,7 +37,7 @@ abstract class _IRouterProvider {
   Route<dynamic> injectGenerateRoute(RouteSettings settings) {
     for (RouterInterceptor interceptor in _routerInterceptors) {
       if (interceptor != null) {
-        var route = interceptor.interceptor(settings);
+        var route = interceptor(settings);
         if (route != null) return route;
       }
     }
@@ -53,7 +51,7 @@ abstract class _IRouterProvider {
 
   Object injectInputArguments<T>(T arguments);
 
-  T injectOutputArguments<T>(Object args);
+  T injectOutputArguments<T>(dynamic args);
 }
 
 abstract class RouterProvider extends _IRouterProvider {
@@ -71,7 +69,7 @@ class MXCRouter {
 
   static MXCRouter get instance => _instance;
 
-  RouterProvider _provider;
+  RouterProvider _provider = _DefaultRouterProvider();
 
   RouteFactory _routeFactory;
 
@@ -158,7 +156,7 @@ class _DefaultRouterProvider extends RouterProvider {
   }
 
   @override
-  T injectOutputArguments<T>(Object args) {
+  T injectOutputArguments<T>(dynamic args) {
     return args;
   }
 }
